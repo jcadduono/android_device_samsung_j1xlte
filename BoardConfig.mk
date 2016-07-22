@@ -1,0 +1,93 @@
+DEVICE_TREE := device/samsung/j1xlte
+
+# Bootloader
+TARGET_NO_BOOTLOADER := true
+TARGET_BOOTLOADER_BOARD_NAME := universal3475
+
+# Platform
+TARGET_BOARD_PLATFORM := exynos3
+TARGET_BOARD_PLATFORM_GPU := mali-t720
+
+# Flags
+#TARGET_GLOBAL_CFLAGS +=
+#TARGET_GLOBAL_CPPFLAGS +=
+#COMMON_GLOBAL_CFLAGS +=
+
+# Architecture
+TARGET_ARCH := arm
+TARGET_ARCH_VARIANT := armv7-a-neon
+TARGET_CPU_ABI := armeabi-v7a
+TARGET_CPU_ABI2 := armeabi
+TARGET_CPU_VARIANT := generic
+TARGET_CPU_SMP := true
+
+# Kernel
+#TARGET_KERNEL_SOURCE := kernel/samsung/universal3475
+TARGET_KERNEL_ARCH := arm
+TARGET_KERNEL_HEADER_ARCH := arm
+TARGET_KERNEL_CONFIG := twrp_defconfig
+TARGET_KERNEL_DEVICE_DEFCONFIG := device_j1xlte
+TARGET_KERNEL_VARIANT_DEFCONFIG := variant_j1xlte_can
+
+TARGET_PREBUILT_KERNEL := $(DEVICE_TREE)/zImage
+TARGET_PREBUILT_DTB := $(DEVICE_TREE)/dtb.img
+
+# DTB
+TARGET_DTBH_PLATFORM_CODE := 0x000050a6
+TARGET_DTBH_SUBTYPE_CODE  := 0x217584da
+
+# Boot image
+BOARD_KERNEL_CMDLINE := # Exynos doesn't take cmdline arguments from boot image
+BOARD_KERNEL_BASE := 0x10000000
+BOARD_KERNEL_PAGESIZE := 2048
+# 000RU = recovery kernel, 000KU = system kernel
+BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --board SRPOL03A000RU
+BOARD_CUSTOM_BOOTIMG_MK :=  $(DEVICE_TREE)/bootimg.mk
+
+# Partitions
+BOARD_BOOTIMAGE_PARTITION_SIZE     := 0x000D00000
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x000F00000
+BOARD_SYSTEMIMAGE_PARTITION_SIZE   := 0x0BB800000
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x2A4FFC000 # 0x2A5000000 16384 (footer)
+BOARD_CACHEIMAGE_PARTITION_SIZE    := 0x040000000
+BOARD_FLASH_BLOCK_SIZE := 131072
+
+# File systems
+BOARD_HAS_LARGE_FILESYSTEM := true
+BOARD_SUPPRESS_SECURE_ERASE := true
+TARGET_USERIMAGES_USE_EXT4 := true
+TARGET_USERIMAGES_USE_F2FS := true
+
+# TWRP specific build flags
+TW_THEME := portrait_hdpi
+RECOVERY_SDCARD_ON_DATA := true
+TARGET_RECOVERY_PIXEL_FORMAT := "ABGR_8888"
+TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/13580000.usb/gadget/lun%d/file"
+TW_BRIGHTNESS_PATH := "/sys/devices/14800000.dsim/backlight/panel/brightness"
+TW_MAX_BRIGHTNESS := 255
+TW_DEFAULT_BRIGHTNESS := 162
+TW_NO_REBOOT_BOOTLOADER := true
+TW_HAS_DOWNLOAD_MODE := true
+TW_INCLUDE_NTFS_3G := true
+# exFAT drivers included in the kernel
+TW_NO_EXFAT_FUSE := true
+# No love for the wicked (device ships with M)
+TW_EXCLUDE_SUPERSU := true
+
+# Encryption support
+TW_INCLUDE_CRYPTO := true
+# Samsung's encryption is currently unsupported
+#TW_INCLUDE_CRYPTO_SAMSUNG := true
+#TARGET_HW_DISK_ENCRYPTION := true
+
+# Asian region languages
+TW_EXTRA_LANGUAGES := true
+
+# Debug flags
+#TWRP_INCLUDE_LOGCAT := true
+
+# Init properties from bootloader version, ex. model info
+TARGET_UNIFIED_DEVICE := true
+TARGET_INIT_VENDOR_LIB := libinit_j1xlte
+TARGET_RECOVERY_DEVICE_MODULES := libinit_j1xlte
+TARGET_LIBINIT_DEFINES_FILE := $(DEVICE_TREE)/init/init_j1xlte.cpp
